@@ -3,23 +3,10 @@ import prisma from '../../index'
 
 export const createPost = Router();
 
-type PostInput = {
-  title: string,
-  type: 'video' | 'audio' | 'inage' | 'text' | 'url';
-  content
-}
-
-
 createPost.post('/', async (req: Request, res: Response) => {
   try {
     const postData = req.body;
-    // TODO: Implement creating post in database
-    await prisma.post.create({
-        data: {
-            title: req.body.title,
-            
-        }
-    })
+    // TODO: Implement creating post in database 
     res.status(201).json({ message: 'Post created', data: postData });
   } catch (error) {
     console.error('Error creating post:', error);

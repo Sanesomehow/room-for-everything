@@ -23,6 +23,8 @@ app.use('/login', logInRouter);
 
 app.use('/posts', postsRouter);
 
+//TODO:add a route for sharind
+
 app.listen(port, ()=> {
     console.log('listening on port' + port);
 })

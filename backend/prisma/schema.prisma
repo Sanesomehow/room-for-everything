@@ -50,3 +50,6 @@ model Tag {
   name String @unique
   posts Post[] @relation("PostTag")
 }
+
+
+//TODO: Create share link model

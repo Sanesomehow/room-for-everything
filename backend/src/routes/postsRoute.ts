@@ -7,7 +7,6 @@ import { createPost } from './posts/createPost';
 import { updatePost } from './posts/updatePost';
 import { deletePost } from './posts/deletePost';
 import { addTagsToPost } from './posts/addTagsToPost';
-import { getTagsForPost } from './posts/getTagsForPost';
 import { removeTagFromPost } from './posts/removeTagFromPost';
 
 export const router = Router();
@@ -61,11 +60,10 @@ router.use('/', updatePost);
 // DELETE /api/posts/:id
 router.use('/', deletePost);
 
+
+
 // POST /api/posts/:id/tags
 router.use('/', addTagsToPost);
-
-// GET /api/posts/:id/tags
-router.use('/', getTagsForPost);
 
 // DELETE /api/posts/:id/tags/:tag
 router.use('/', removeTagFromPost);
