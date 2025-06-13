@@ -21,23 +21,11 @@ model User {
   posts Post[] @relation("UserPost")
 }
 
-enum PostType {
-  text
-  video
-  audio
-  image
-  url
-}
-
 model Post {
   id  Int @id @default(autoincrement())
-  type PostType
   title String? @db.VarChar(100)
   text String?
-  imageURl String?
-  videoURL String?
-  audioURL String?
-  externalURl String?
+  url  String?
   user User @relation("UserPost", fields: [userId], references: [id])
   userId  Int
   tags  Tag[]  @relation("PostTag")
