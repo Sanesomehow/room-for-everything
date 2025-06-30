@@ -14,17 +14,32 @@
   "dependencies": {
     "@prisma/client": "6.8.2",
     "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.18",
-    "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.2",
+    "@types/got": "^9.6.12",
     "@types/jsonwebtoken": "^9.0.9",
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2"
+    "google-auth-library": "^10.1.0",
+    "got": "^14.4.7",
+    "jsonwebtoken": "^9.0.2",
+    "metascraper": "^5.47.2",
+    "metascraper-description": "^5.47.2",
+    "metascraper-image": "^5.47.2",
+    "metascraper-title": "^5.47.2",
+    "metascraper-url": "^5.47.2",
+    "oauth-1.0a": "^2.2.6",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
+    "@types/passport": "^1.0.17",
+    "@types/passport-google-oauth20": "^2.0.16",
     "prisma": "6.8.2"
   }
 }

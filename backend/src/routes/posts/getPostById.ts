@@ -1,11 +1,11 @@
 import { Router, Request, Response } from 'express';
-import prisma from '../../index'
+import prisma from '../../prismaConfig'
 
 export const getPostById = Router();
 
 getPostById.get('/:id', async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
+        const { id } = req.body;
         let idNum = parseInt(id)
         // TODO: Implement fetching post by ID from database
 

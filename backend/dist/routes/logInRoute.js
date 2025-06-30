@@ -15,34 +15,48 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = require("express");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const index_1 = __importDefault(require("../index"));
+const prismaConfig_1 = __importDefault(require("../prismaConfig"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.router = (0, express_1.Router)();
 exports.router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const username = req.body.username;
         const password = req.body.password;
-        const id = req.params;
         const secret = process.env.JWT_SECRET || 'secret';
-        const user = yield index_1.default.user.findUnique({
+        const user = yield prismaConfig_1.default.user.findUnique({
             where: {
                 email: username,
             }
         });
-        if (!(user === null || user === void 0 ? void 0 : user.password)) {
-            res.json({
+        if (!user) {
+            res.status(401).json({
                 error: "Invalid Username or Passsword"
             });
             return;
         }
-        const match = yield bcrypt_1.default.compare(password, user === null || user === void 0 ? void 0 : user.password);
+        if (!user.password) {
+            res.status(401).json({
+                error: "This account was created using Google. Please use Google Sign-In."
+            });
+            return;
+        }
+        const match = yield bcrypt_1.default.compare(password, user.password);
         if (match) {
             const token = jsonwebtoken_1.default.sign({
-                userId: id
+                userId: user.id
             }, secret, { expiresIn: '168h' });
-            res.json({
+            res.cookie('auth_token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+            }).json({
                 message: "User Login successful",
-                token,
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name
+                }
             });
         }
     }

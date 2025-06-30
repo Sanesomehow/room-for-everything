@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import prisma from '../../index'
+import prisma from '../../prismaConfig'
 
 export const deletePost = Router();
 
@@ -7,7 +7,19 @@ deletePost.delete('/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     let idNum = parseInt(id);
-    // TODO: Implement deleting post from database
+
+    const existingPost = await prisma.post.findUnique({
+      where: {
+        id: idNum
+      }
+    });
+
+    if(!existingPost) {
+      res.status(404).json({
+        message: "Post not found"
+      });
+    }
+    
     await prisma.post.delete({
       where: {
         id: idNum

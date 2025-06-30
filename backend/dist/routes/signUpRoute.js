@@ -14,17 +14,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = require("express");
-const index_1 = __importDefault(require("../index"));
+const prismaConfig_1 = __importDefault(require("../prismaConfig"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 exports.router = (0, express_1.Router)();
 exports.router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const saltRounds = parseInt(process.env.SALT_ROUNDS || '10', 10);
         const hash = yield bcrypt_1.default.hash(req.body.password, saltRounds);
-        const newUser = yield index_1.default.user.create({
+        const newUser = yield prismaConfig_1.default.user.create({
             data: {
+                name: req.body.name,
                 email: req.body.email,
                 password: hash
+            }, select: {
+                id: true,
+                email: true
             }
         });
         res.status(200).json({

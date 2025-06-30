@@ -1,15 +1,97 @@
 import { Router, Request, Response } from 'express';
-import prisma from '../../index'
+import prisma from '../../prismaConfig';
+import { findType } from "../../findType"
+import { ItemType } from '../../../dist/generated/prisma';
+import got from 'got';
 
-export const createPost = Router();
+import metascraper from 'metascraper';
+import metascraperTitle from 'metascraper-title';
+import metascraperDescription from 'metascraper-description';
+import metascraperImage from 'metascraper-image';
+import metascraperUrl from 'metascraper-url';
+import { fetchTwitterMetadata } from '../../fetchTwitterMetadata';
 
-createPost.post('/', async (req: Request, res: Response) => {
+const scraper = metascraper([
+  metascraperTitle(),
+  metascraperDescription(),
+  metascraperImage(),
+  metascraperUrl()
+]);
+
+const router = Router();
+
+interface CreatePostBody {
+  title?: string;
+  text?: string;
+  url?: string;
+  tags?: string[];
+}
+
+interface Metadata {
+  title?: string;
+  description?: string;
+  image?: string;
+  url?: string;
+}
+
+router.post('/', async (req: Request<{}, {}, CreatePostBody>, res: Response) => {
   try {
-    const postData = req.body;
-    // TODO: Implement creating post in database 
-    res.status(201).json({ message: 'Post created', data: postData });
+    const { title, text, url, tags } = req.body;
+    let previewData = {};
+    let type: ItemType = ItemType.TEXT;
+
+    if (url) {
+      try {
+        type = findType(url);
+        if (type === ItemType.TWITTER) {
+          //previewData = await fetchTwitterMetadata(url);
+          console.log(previewData)
+        }else {
+          const { body: html } = await got(url, {
+          timeout: {
+            request: 10000 // 10 sec
+          }
+        });
+          previewData = await scraper({ html, url });
+        }
+        
+        //console.log('Scraped metadata:', previewData);
+      } catch (error) {
+        console.error('Failed to load metadata:', error);
+      } 
+    }
+
+
+
+    const userId = (req as any).user?.userId || 1;
+
+
+
+    const post = await prisma.post.create({
+      data: {
+        title,
+        text,
+        url,
+        type,
+        previewData: JSON.stringify(previewData),
+        userId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+
+    res.status(201).json({
+      message: 'Post created successfully',
+      post,
+      previewData
+    });
   } catch (error) {
     console.error('Error creating post:', error);
-    res.status(500).json({ error: 'Failed to create post' });
+    res.status(500).json({
+      error: 'Failed to create post',
+      details: process.env.NODE_ENV === 'development' ? error : undefined
+    });
   }
 });
+
+export { router as createPost };

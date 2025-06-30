@@ -17,8 +17,23 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
   email String @unique
-  password String
+  name String?
+  password String?
+  googleId String?
+  profilePicture String?
+  createdAt DateTime @default(now())
   posts Post[] @relation("UserPost")
+}
+
+enum ItemType {
+  LINK
+  TEXT 
+  YOUTUBE
+  INSTAGRAM
+  TWITTER
+  LINKEDIN
+  PINTEREST
+  FACEBOOK
 }
 
 model Post {
@@ -26,17 +41,13 @@ model Post {
   title String? @db.VarChar(100)
   text String?
   url  String?
+  previewData String?
+  type ItemType 
+  isPublic Boolean @default(false)
   user User @relation("UserPost", fields: [userId], references: [id])
   userId  Int
-  tags  Tag[]  @relation("PostTag")
-  createdAt DateTime
-  updatedAt DateTime
-}
-
-model Tag {
-  id Int @id @default(autoincrement())
-  name String @unique
-  posts Post[] @relation("PostTag")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 

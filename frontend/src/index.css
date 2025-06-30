@@ -1,9 +1,9 @@
 @import "tailwindcss";
-@plugin "flowbite-react/plugin/tailwindcss";
-@source "../.flowbite-react/class-list.json";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@plugin "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -44,79 +44,172 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 0.75rem;
+  
+  /* Deep Space Navy Theme - Light mode (using darker colors as base) */
+  --background: #0F1419; /* Deep Space Navy */
+  --foreground: #F8FAFC; /* Cosmic White */
+  --card: #1A0B2E; /* Cosmic Purple */
+  --card-foreground: #F8FAFC; /* Cosmic White */
+  --popover: #1E293B; /* Card background */
+  --popover-foreground: #F8FAFC; /* Cosmic White */
+  --primary: #64FFDA; /* Aurora Green */
+  --primary-foreground: #0F1419; /* Deep Space Navy */
+  --secondary: #16213E; /* Stellar Blue */
+  --secondary-foreground: #F8FAFC; /* Cosmic White */
+  --muted: #1E293B; /* Subtle dark */
+  --muted-foreground: #94A3B8; /* Stardust Gray */
+  --accent: #FF6B9D; /* Nebula Pink */
+  --accent-foreground: #F8FAFC; /* Cosmic White */
+  --destructive: #FF6B9D; /* Nebula Pink for destructive actions */
+  --border: #16213E; /* Stellar Blue */
+  --input: #1E293B; /* Card background */
+  --ring: #64FFDA; /* Aurora Green */
+  --chart-1: #64FFDA; /* Aurora Green */
+  --chart-2: #FF6B9D; /* Nebula Pink */
+  --chart-3: #16213E; /* Stellar Blue */
+  --chart-4: #1A0B2E; /* Cosmic Purple */
+  --chart-5: #94A3B8; /* Stardust Gray */
+  --sidebar: #1A0B2E; /* Cosmic Purple */
+  --sidebar-foreground: #F8FAFC; /* Cosmic White */
+  --sidebar-primary: #64FFDA; /* Aurora Green */
+  --sidebar-primary-foreground: #0F1419; /* Deep Space Navy */
+  --sidebar-accent: #16213E; /* Stellar Blue */
+  --sidebar-accent-foreground: #F8FAFC; /* Cosmic White */
+  --sidebar-border: #16213E; /* Stellar Blue */
+  --sidebar-ring: #64FFDA; /* Aurora Green */
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Deep Space Navy Theme - Enhanced dark mode */
+  --background: #0F1419; /* Deep Space Navy */
+  --foreground: #F8FAFC; /* Cosmic White */
+  --card: #1A0B2E; /* Cosmic Purple */
+  --card-foreground: #F8FAFC; /* Cosmic White */
+  --popover: #1E293B; /* Card background */
+  --popover-foreground: #F8FAFC; /* Cosmic White */
+  --primary: #64FFDA; /* Aurora Green */
+  --primary-foreground: #0F1419; /* Deep Space Navy */
+  --secondary: #16213E; /* Stellar Blue */
+  --secondary-foreground: #F8FAFC; /* Cosmic White */
+  --muted: #1E293B; /* Subtle dark */
+  --muted-foreground: #94A3B8; /* Stardust Gray */
+  --accent: #FF6B9D; /* Nebula Pink */
+  --accent-foreground: #F8FAFC; /* Cosmic White */
+  --destructive: #FF6B9D; /* Nebula Pink for destructive actions */
+  --border: #16213E; /* Stellar Blue */
+  --input: #1E293B; /* Card background */
+  --ring: #64FFDA; /* Aurora Green */
+  --chart-1: #64FFDA; /* Aurora Green */
+  --chart-2: #FF6B9D; /* Nebula Pink */
+  --chart-3: #16213E; /* Stellar Blue */
+  --chart-4: #1A0B2E; /* Cosmic Purple */
+  --chart-5: #94A3B8; /* Stardust Gray */
+  --sidebar: #1A0B2E; /* Cosmic Purple */
+  --sidebar-foreground: #F8FAFC; /* Cosmic White */
+  --sidebar-primary: #64FFDA; /* Aurora Green */
+  --sidebar-primary-foreground: #0F1419; /* Deep Space Navy */
+  --sidebar-accent: #16213E; /* Stellar Blue */
+  --sidebar-accent-foreground: #F8FAFC; /* Cosmic White */
+  --sidebar-border: #16213E; /* Stellar Blue */
+  --sidebar-ring: #64FFDA; /* Aurora Green */
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  
   body {
     @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  /* Card styles with cosmic effects */
+  .card {
+    background: var(--card);
+    box-shadow: 0 8px 32px rgba(15, 20, 25, 0.4);
+    border: 1px solid var(--border);
+  }
+  
+  /* Button styles with gradient borders and glows */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), #4ECDC4);
+    color: var(--primary-foreground);
+    box-shadow: 0 0 20px rgba(100, 255, 218, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    box-shadow: 0 0 25px rgba(100, 255, 218, 0.4);
+    transform: translateY(-1px);
+  }
+  
+  .btn-secondary {
+    background: var(--secondary);
+    border: 1px solid var(--primary);
+    color: var(--foreground);
+    box-shadow: 0 0 15px rgba(22, 33, 62, 0.3);
+  }
+  
+  .btn-accent {
+    background: linear-gradient(135deg, var(--accent), #FF8FB3);
+    color: var(--accent-foreground);
+    box-shadow: 0 0 20px rgba(255, 107, 157, 0.2);
+  }
+  
+  /* Input field styles */
+  input, textarea, select {
+    background: var(--input);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    transition: all 0.3s ease;
+  }
+  
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 15px rgba(100, 255, 218, 0.2);
+    outline: none;
+  }
+  
+  /* Navigation styles */
+  .nav-floating {
+    background: rgba(26, 11, 46, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(22, 33, 62, 0.5);
+    box-shadow: 0 8px 32px rgba(15, 20, 25, 0.4);
+  }
+  
+  /* Divider styles */
+  .divider {
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    height: 1px;
+  }
+  
+  /* Typography styles */
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--foreground);
+    font-weight: 700;
+  }
+  
+  .text-meta {
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+  }
+  
+  code, pre {
+    color: var(--primary);
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  }
+  
+  /* Interactive element glows */
+  .interactive:hover {
+    box-shadow: 0 0 20px rgba(100, 255, 218, 0.1);
+  }
+  
+  /* Overlay styles */
+  .overlay {
+    background: rgba(15, 20, 25, 0.8);
+    backdrop-filter: blur(10px);
   }
 }

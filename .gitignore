@@ -11,6 +11,8 @@ node_modules
 .env.test.local
 .env.production.local
 
+google-oauth.json
+
 # Build outputs
 /dist
 /build

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import prisma from '../index';
+import prisma from '../prismaConfig';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 
@@ -14,6 +14,7 @@ router.post('/', async (req: Request, res: Response) => {
         
         const newUser = await prisma.user.create({
             data: {
+                name: req.body.name,
                 email: req.body.email,
                 password: hash
             }, select: {

@@ -1,5 +1,5 @@
 import { RequestHandler, Request, Response, Router } from 'express';
-import prisma from '../index';
+import prisma from '../prismaConfig';
 import jwt from 'jsonwebtoken';
 import { getAllPosts } from './posts/getAllPosts';
 import { getPostById } from './posts/getPostById';
@@ -19,16 +19,19 @@ declare global {
   }
 }
 
-//@ts-ignore
+/* AUTHENTICATION MIDDLEWARE COMMENTED OUT FOR DEVELOPMENT
 const authMiddleware : RequestHandler = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  const token: string | undefined = authHeader && authHeader.split(' ')[1]
+  const headerToken = authHeader && authHeader.split(' ')[1];
+  const cookieToken = req.cookies.auth_token;
+  const token = headerToken || cookieToken;
   const secret = process.env.JWT_SECRET || 'secret';
 
   if (token == null) {
-    return res.status(401).json({
+    res.status(401).json({
       error: "Auth token is required"
     });
+    return;
   }
   try {
     var decoded = jwt.verify(token, secret);
@@ -37,13 +40,23 @@ const authMiddleware : RequestHandler = (req, res, next) => {
     next();
   } catch (err) {
     console.log(err)
-    return res.status(403).json({
+    res.status(403).json({
       error: "Invalid or expired token"
     })
+    return;
   }
 };
+*/
 
-router.use(authMiddleware)
+// Temporary development middleware that bypasses authentication
+const devAuthMiddleware: RequestHandler = (req, res, next) => {
+  // Set a mock user ID for development
+  req.user = { userId: 1 };
+  next();
+};
+
+// Use the dev middleware instead of the real auth middleware
+router.use(devAuthMiddleware);
 
 // GET /api/posts
 router.use('/', getAllPosts);
