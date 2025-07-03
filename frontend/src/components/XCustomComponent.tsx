@@ -17,7 +17,7 @@ export function XCustomComponent({url}: {url: string}) {
     }
     
     return (
-        <div data-theme="dark" className="max-h-100 overflow-y-auto overflow-x-hidden bg-[#15202B] hover:bg-[#1e2732] rounded-2xl flex justify-center px-5" >
+        <div data-theme="dark" className="max-h-100 md:max-h- overflow-y-auto overflow-x-hidden bg-[#15202B] hover:bg-[#1e2732] rounded-2xl flex justify-center px-5" >
             <Tweet id={id} />
         </div>
     );

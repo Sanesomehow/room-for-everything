@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { AppDispatch } from "@/store";
 import { fetchPosts } from "@/slices/postsSlice";
 
@@ -18,6 +18,19 @@ export function UploadForm({
     const [url, setUrl] = useState("");
 
   const [link, setLink] = useState(true);
+
+  useEffect(() => {
+    if(isVisible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    }
+  }, [isVisible])
+
   const handleType = (item: boolean) => {
     setLink(item);
   };
@@ -48,7 +61,7 @@ export function UploadForm({
   }
 
   return (
-    <div className="z-10 absolute flex items-center justify-center min-w-screen h-screen backdrop-blur-xl"
+    <div className="z-50 absolute fixed inset-0 flex items-center justify-center min-w-screen min-h-screen backdrop-blur-xl"
     onClick={handleBackdropClick}
     >
       <div className="flex flex-col items-center gap-5">

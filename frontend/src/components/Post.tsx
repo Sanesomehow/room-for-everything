@@ -47,7 +47,11 @@ export function Post({post, screen}: {post: any, screen: string}) {
           e.stopPropagation();
           handleDelete();
         }}
-        className="absolute top-2 right-2 z-20 p-2 rounded-full bg-red-500/80 hover:bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110 shadow-lg"
+        className={`absolute top-2 right-2 z-20 p-2 rounded-full bg-red-500/80 hover:bg-red-500 text-white transition-all duration-200 hover:scale-110 shadow-lg
+          ${ screen == "mobile" 
+            ? "opacity-100"
+            : "opacity-0 group-hover:opacity-100"
+          }`}
         aria-label="Delete post"
       >
         <svg 
@@ -90,6 +94,7 @@ export function Post({post, screen}: {post: any, screen: string}) {
           {/* Subtle glow effect */}
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           <InstagramEmbed url={previewData.url} width={width} height={height*5/2} />
+          
         </div>
       )}
     

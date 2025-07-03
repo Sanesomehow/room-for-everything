@@ -14,7 +14,7 @@ export const router = Router();
 declare global {
   namespace Express {
     interface Request {
-      user?: any;
+      user?: User | undefined;
     }
   }
 }

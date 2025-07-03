@@ -2,21 +2,10 @@ import { Router, Request, Response } from 'express';
 import prisma from '../../prismaConfig';
 import { findType } from "../../findType"
 import { ItemType } from '../../../dist/generated/prisma';
-import got from 'got';
 
-import metascraper from 'metascraper';
-import metascraperTitle from 'metascraper-title';
-import metascraperDescription from 'metascraper-description';
-import metascraperImage from 'metascraper-image';
-import metascraperUrl from 'metascraper-url';
-import { fetchTwitterMetadata } from '../../fetchTwitterMetadata';
+import { fetchMetadata } from '../../fetchMetadata';
 
-const scraper = metascraper([
-  metascraperTitle(),
-  metascraperDescription(),
-  metascraperImage(),
-  metascraperUrl()
-]);
+
 
 const router = Router();
 
@@ -27,12 +16,6 @@ interface CreatePostBody {
   tags?: string[];
 }
 
-interface Metadata {
-  title?: string;
-  description?: string;
-  image?: string;
-  url?: string;
-}
 
 router.post('/', async (req: Request<{}, {}, CreatePostBody>, res: Response) => {
   try {
@@ -42,19 +25,11 @@ router.post('/', async (req: Request<{}, {}, CreatePostBody>, res: Response) => 
 
     if (url) {
       try {
-        type = findType(url);
-        if (type === ItemType.TWITTER) {
-          //previewData = await fetchTwitterMetadata(url);
-          console.log(previewData)
-        }else {
-          const { body: html } = await got(url, {
-          timeout: {
-            request: 10000 // 10 sec
-          }
-        });
-          previewData = await scraper({ html, url });
-        }
-        
+        type = findType(url)
+
+        previewData = (await fetchMetadata({ url, type })) ?? {};
+        //previewData = await scraper({ html, url });
+
         //console.log('Scraped metadata:', previewData);
       } catch (error) {
         console.error('Failed to load metadata:', error);

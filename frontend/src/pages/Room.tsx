@@ -10,8 +10,10 @@ import { UploadForm } from "@/components/UploadForm";
 import { FilterComponent } from "@/components/FilterComponent";
 import { ItemType } from "@/types";
 
-export function Room() {
-  const [screen, setScreen] = useState<"mobile" | "tablet" | "desktop">("desktop");
+export function Room({screen, setScreen} : {
+  screen: string,
+  setScreen: React.Dispatch<React.SetStateAction<"desktop" | "tablet" | "mobile">>
+}) {
 
   const dispatch: AppDispatch = useDispatch();
   const posts = useSelector((state: RootState) => state.posts.data);
@@ -19,19 +21,7 @@ export function Room() {
   const [selectedFilters, setSelectedFilters] = useState<ItemType[]>([]);
 
   useEffect(() => {
-    const updateScreen = () => {
-      if (window.innerWidth < 768) {
-        setScreen("mobile");
-      } else if (window.innerWidth >= 768 && window.innerWidth < 1200) {
-        setScreen("tablet");
-      } else {
-        setScreen("desktop");
-      }
-    };
-    updateScreen();
-    window.addEventListener("resize", updateScreen);
     dispatch(fetchPosts());
-    return () => window.removeEventListener("resize", updateScreen);
   }, [dispatch]);
 
   // Filter posts based on selected filters
@@ -51,7 +41,7 @@ export function Room() {
     <div className="bg-background flex flex-col">
       
       
-      <div className="px-5 mb-6 flex justify-start">
+      <div className="px-10 mb-10 mt-20 flex justify-start">
         <FilterComponent 
           selectedFilters={selectedFilters}
           onFiltersChange={setSelectedFilters}
