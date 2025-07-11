@@ -19,7 +19,6 @@ declare global {
   }
 }
 
-/* AUTHENTICATION MIDDLEWARE COMMENTED OUT FOR DEVELOPMENT
 const authMiddleware : RequestHandler = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const headerToken = authHeader && authHeader.split(' ')[1];
@@ -34,7 +33,7 @@ const authMiddleware : RequestHandler = (req, res, next) => {
     return;
   }
   try {
-    var decoded = jwt.verify(token, secret);
+    const decoded = jwt.verify(token, secret);
     console.log(decoded)
     req.user = decoded;
     next();
@@ -46,17 +45,17 @@ const authMiddleware : RequestHandler = (req, res, next) => {
     return;
   }
 };
-*/
+
 
 // Temporary development middleware that bypasses authentication
-const devAuthMiddleware: RequestHandler = (req, res, next) => {
-  // Set a mock user ID for development
-  req.user = { userId: 1 };
-  next();
-};
+// const devAuthMiddleware: RequestHandler = (req, res, next) => {
+//   // Set a mock user ID for development
+//   req.user = { userId: 1 };
+//   next();
+// };
 
 // Use the dev middleware instead of the real auth middleware
-router.use(devAuthMiddleware);
+// router.use(devAuthMiddleware);
 
 // GET /api/posts
 router.use('/', getAllPosts);

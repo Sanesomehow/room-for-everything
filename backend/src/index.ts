@@ -5,26 +5,24 @@ import { router as rootRouter } from './routes/index'
 import { router as signUpRouter } from './routes/signUpRoute'
 import { router as logInRouter } from './routes/logInRoute'
 import { router as postsRouter } from './routes/postsRoute'
-import { router as googleAuthRouter } from './routes/googleAuthRoute'
-import passport from 'passport';
+// import { router as googleAuthRouter } from './routes/googleAuthRoute'
+// import passport from 'passport';
 
 const port: number | undefined = parseInt(process.env.PORT || '3000');
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:5173', // Add your frontend URL
+  origin: 'http://localhost:5173', 
   credentials: true
 }));
 app.use(cookieParser());
 
 app.use('/', rootRouter);
 
-// Auth routes are still registered but won't be used during development
 app.use('/login', logInRouter);
 app.use('/signup', signUpRouter);
-app.use('/auth', googleAuthRouter);
+//app.use('/auth', googleAuthRouter);
 
-// The posts route is the main one we need working without auth
 app.use('/api/posts', postsRouter);
 
 //TODO: add a route for sharing

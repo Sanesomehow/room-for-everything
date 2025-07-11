@@ -5,9 +5,12 @@ export const getPostById = Router();
 
 getPostById.get('/:id', async (req: Request, res: Response) => {
     try {
-        const { id } = req.body;
-        let idNum = parseInt(id)
-        // TODO: Implement fetching post by ID from database
+        const { id } = req.params;
+        let idNum = parseInt(id);
+        if (isNaN(idNum)) {
+            res.status(400).json({ error: 'Invalid post ID. Must be a number.' });
+            return;
+        }
 
         const post = await prisma.post.findFirst({
             where: {
@@ -15,7 +18,7 @@ getPostById.get('/:id', async (req: Request, res: Response) => {
             }
         })
         res.status(200).json({ 
-            message: `Get post ${id}`,
+            message: `Get post ${idNum}`,
             post
          });
     } catch (error) {

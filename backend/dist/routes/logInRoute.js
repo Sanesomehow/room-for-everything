@@ -20,12 +20,12 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.router = (0, express_1.Router)();
 exports.router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const username = req.body.username;
+        const email = req.body.email;
         const password = req.body.password;
         const secret = process.env.JWT_SECRET || 'secret';
         const user = yield prismaConfig_1.default.user.findUnique({
             where: {
-                email: username,
+                email: email,
             }
         });
         if (!user) {

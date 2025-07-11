@@ -1,21 +1,23 @@
+import usePostStore from "@/store";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import type { AppDispatch } from "@/store";
-import { fetchPosts } from "@/slices/postsSlice";
+//import type { AppDispatch } from "@/store";
+//import { fetchPosts } from "@/slices/postsSlice";
 
 export function UploadForm({
   isVisible, 
   setIsVisible,
-  dispatch
+  //dispatch
 }: {
   isVisible: boolean;
   setIsVisible: (isVisible: boolean) => void;
-  dispatch: AppDispatch;
+  //dispatch: AppDispatch;
 }) {
     const backend = import.meta.env.VITE_BACKEND_URL;
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [url, setUrl] = useState("");
+    const { fetchPosts } = usePostStore(); 
 
   const [link, setLink] = useState(true);
 
@@ -54,7 +56,7 @@ export function UploadForm({
         const response = await axios.post(`${backend}/api/posts`, data);
         console.log(response); 
         setIsVisible(false);
-        dispatch(fetchPosts());
+        fetchPosts()
     } catch(error) {
         console.error("Failed to create post: ", error);
     }

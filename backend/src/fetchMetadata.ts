@@ -16,71 +16,42 @@ export async function fetchMetadata({ url, type }: {
     type: string
 }) {
 
-    const { body: html } = await got(url, {
-        timeout: {
-            request: 10000 // 10 sec
-        }
-    });
-
     if (type == ItemType.TWITTER) {
-        const twitterUrl = new URL(url)
-        const path = twitterUrl.pathname;
-        const nitterUrl = `https://nitter.net/${path}`;
+
+        const params = new URLSearchParams({
+            omit_script: 'true',
+            format: 'json',
+            theme: 'dark',
+            hide_thread: 'true',
+            hide_media: 'false',
+            maxwidth: '550'
+        });
         try {
-            const response = await fetch(nitterUrl, {
-                headers: {
-                    'User-Agent': 'Mozilla/5.0',
-                },
-            })
-
-            const html = await response.text();
-            const $ = cheerio.load(html);
-
-            const tweetText = $('.tweet-content').text().trim();
-            const timestamp = $('a.tweet-date > span').attr('title') || null;
-            const username = $('.tweet-header .username').text().trim();
-            const displayName = $('.tweet-header .fullname').text().trim();
-            const avatarUrl = $('.tweet-header .avatar > img').attr('src')?.startsWith('http')
-                ? $('.tweet-header .avatar > img').attr('src')
-                : `https://nitter.net${$('.tweet-header .avatar > img').attr('src')}`;
-
-            const stats = $('.tweet-stats .icon-container');
-            const replies = $(stats[0]).find('.icon').next().text().trim();
-            const retweets = $(stats[1]).find('.icon').next().text().trim();
-            const likes = $(stats[2]).find('.icon').next().text().trim();
-
-            const images: string[] = [];
-            $('.tweet-body .attachment.image > a').each((i, el) => {
-                const href = $(el).attr('href');
-                if (href) images.push(`https://nitter.net${href}`);
-            });
-
-            const links: string[] = [];
-            $('.tweet-content a').each((i, el) => {
-                const href = $(el).attr('href');
-                if (href && !href.startsWith('/')) links.push(href);
-            });
-            console.log(
-                tweetText
-            )
-
-            return {
-                tweetText,
-                timestamp,
-                username,
-                displayName,
-                avatarUrl,
-                stats,
-                replies,
-                retweets,
-                likes,
-                images,
-                links
+            const fetchResponse = await fetch(`https://publish.twitter.com/oembed?url=${encodeURIComponent(url)}&${params.toString()}`, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Accept': 'application/json'
             }
-        } catch (error) {
-            console.error("failed to fetch metadata from nitter: ", error);
+        });
+
+            if (!fetchResponse.ok) {
+                throw new Error(`Twitter API returned status ${fetchResponse.status}`);
+            }
+
+            const data = await fetchResponse.json();
+            return data
+        } catch(error) {
+            console.error("failed to fetch tweet: ", error);
         }
+
+    }else if(type == ItemType.INSTAGRAM){
+        
     } else {
+        const { body: html } = await got(url, {
+            timeout: {
+                request: 10000 // 10 sec
+            }
+        });
         const scraper = metascraper([
             metascraperTitle(),
             metascraperDescription(),

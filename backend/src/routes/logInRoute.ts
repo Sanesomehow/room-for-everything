@@ -7,17 +7,17 @@ export const router = Router();
 
 router.post('/', async (req: Request, res: Response) => {
     try {
-        const username = req.body.username;
+        const email = req.body.email;
         const password = req.body.password;
         const secret: string = process.env.JWT_SECRET || 'secret';
         const user = await prisma.user.findUnique({
             where: {
-                email: username,
+                email: email,
             }
         })
         if (!user) {
             res.status(401).json({
-                error: "Invalid Username or Passsword"
+                error: "Invalid email or Passsword"
             });
             return;
         }
@@ -38,7 +38,7 @@ router.post('/', async (req: Request, res: Response) => {
             res.cookie('auth_token', token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                sameSite: 'lax',
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
             }).json({
                 message: "User Login successful",
@@ -48,6 +48,10 @@ router.post('/', async (req: Request, res: Response) => {
                     name: user.name
                 }
             });
+        } else {
+            res.status(401).json({
+                error: "Invalid email or password"
+            })
         }
 
     } catch (err) {
