@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuthStore } from "@/store";
 
 export function Homepage() {
-  const [currentFeature, setCurrentFeature] = useState(0);
-  
+  const { isAuthenticated } = useAuthStore();
+  let buttonLink: '/login' | '/room' | '/signup' = '/login';
   const features = [
     {
       title: "Curate Everything",
@@ -28,11 +29,10 @@ export function Homepage() {
   ];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentFeature((prev) => (prev + 1) % features.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+    if(isAuthenticated) {
+      buttonLink = '/room'
+    }
+  }, [isAuthenticated, buttonLink]);
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">
@@ -57,7 +57,7 @@ export function Homepage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">            
-            <Link to="/login">
+            <Link to={buttonLink}>
               <button className="px-8 py-4 border-2 border-primary text-primary font-semibold rounded-full hover:bg-primary hover:text-primary-foreground transition-all duration-300 transform hover:scale-105 font-raleway">
                 Create Your Space
               </button>
@@ -194,7 +194,7 @@ export function Homepage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <Link to="/login">
+            <Link to={buttonLink}>
               <button className="group relative px-10 py-5 bg-gradient-to-r from-accent via-accent to-accent text-primary-foreground font-bold rounded-full shadow-xl hover:shadow-2xl hover:shadow-primary/30 transform hover:scale-110 transition-all duration-500 text-lg font-raleway">
                 <span className="relative z-10">Create Your Universe</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary to-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>

@@ -16,6 +16,7 @@ exports.router = void 0;
 const express_1 = require("express");
 const prismaConfig_1 = __importDefault(require("../prismaConfig"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.router = (0, express_1.Router)();
 exports.router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -28,12 +29,22 @@ exports.router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, functio
                 password: hash
             }, select: {
                 id: true,
-                email: true
+                email: true,
+                name: true
             }
         });
-        res.status(200).json({
+        const secret = process.env.JWT_SECRET || 'secret';
+        const token = jsonwebtoken_1.default.sign({
+            userId: newUser.id
+        }, secret, { expiresIn: '168h' });
+        res.cookie('auth_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        }).status(200).json({
             message: "User signed Up",
-            newUser
+            user: newUser
         });
     }
     catch (error) {

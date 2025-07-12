@@ -1,20 +1,15 @@
-// import { configureStore } from "@reduxjs/toolkit";
-// import postsReducer, { fetchPosts } from "./slices/postsSlice";
-
-// export const store = configureStore({
-//     reducer: {
-//         posts: postsReducer,
-//     }
-// });
-
-// export type RootState = ReturnType<typeof store.getState>;
-// export type AppDispatch = typeof store.dispatch;
-
-
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import axios from "axios";
 import Fuse from "fuse.js";
 import type { ItemType } from "./types";
+//import { error } from "console";
+
+axios.defaults.withCredentials = true;
+
+
+
+//Store for all post related logic(filtering, searching)
 
 interface StandardPreviewData {
     title?: string;
@@ -42,11 +37,6 @@ export interface Post {
     userId: number;
     createdAt: Date;
     updatedAt: Date;
-}
-
-interface ScreenStore {
-    screen: "mobile" | "tablet" | "desktop";
-    setScreen: (screen: "mobile" | "tablet" | "desktop") => void;
 }
 
 interface PostStore {
@@ -91,13 +81,6 @@ const fuseOptions = {
     findAllMatches: true
 }
 
-export const useScreenStore = create<ScreenStore>((set, get) => ({
-    screen: 'desktop',
-    setScreen: (screen: "mobile" | "tablet" | "desktop") => set({screen})
-}))
-
-
-
 const usePostStore = create<PostStore>((set, get) => ({
     posts: [],
     loading: false,
@@ -111,8 +94,8 @@ const usePostStore = create<PostStore>((set, get) => ({
         const parsedPosts = posts.map(post => ({
             ...post,
             previewData: typeof post.previewData === 'string'
-            ? JSON.parse(post.previewData)
-            : post.previewData
+                ? JSON.parse(post.previewData)
+                : post.previewData
         }))
         const fuse = new Fuse(parsedPosts, fuseOptions);
         set({ posts: parsedPosts, fuse, })
@@ -123,7 +106,7 @@ const usePostStore = create<PostStore>((set, get) => ({
     setSearchResults: (searchResults: (Post & { score?: number, matches?: any[] })[]) => set({ searchResults }),
     setFilters: (filters: ItemType[]) => set({ filters }),
     clearFilters: () => set({ filters: [] }),
-    clearSearchResults: () => set({searchQuery: '', searchResults: []}),
+    clearSearchResults: () => set({ searchQuery: '', searchResults: [] }),
 
     fetchPosts: async () => {
         set({ loading: true, error: null });
@@ -131,11 +114,11 @@ const usePostStore = create<PostStore>((set, get) => ({
             const response = await axios.get(`${backend}/api/posts`);
             const posts = response.data as Post[];
             const parsedPosts = posts.map(post => ({
-            ...post,
-            previewData: typeof post.previewData === 'string' 
-                ? JSON.parse(post.previewData) 
-                : post.previewData
-        })); 
+                ...post,
+                previewData: typeof post.previewData === 'string'
+                    ? JSON.parse(post.previewData)
+                    : post.previewData
+            }));
             const fuse = new Fuse(parsedPosts, fuseOptions);
             set({ posts: parsedPosts, fuse, loading: false });
         } catch (error) {
@@ -165,7 +148,7 @@ const usePostStore = create<PostStore>((set, get) => ({
             set({ searchResults: mappedResults });
             return mappedResults;
         } catch (error) {
-            console.error("Search error: ", error);
+            //console.error("Search error: ", error);
             set({ searchResults: [] });
             return [];
         }
@@ -187,3 +170,137 @@ const usePostStore = create<PostStore>((set, get) => ({
 }))
 
 export default usePostStore;
+
+//Store for determining type of screen;
+
+interface ScreenStore {
+    screen: "mobile" | "tablet" | "desktop";
+    setScreen: (screen: "mobile" | "tablet" | "desktop") => void;
+}
+
+export const useScreenStore = create<ScreenStore>((set, get) => ({
+    screen: 'desktop',
+    setScreen: (screen: "mobile" | "tablet" | "desktop") => set({ screen })
+}))
+
+
+//Store for all Auth logic
+
+interface AuthStore {
+    user: any;
+    isAuthenticated: boolean;
+    loading: boolean;
+    error: string | null;
+    login: (email: string, password: string) => Promise<boolean>;
+    signup: (name: string, email: string, password: string) => Promise<boolean>;
+    logout: () => void;
+    initializeAuth: () => void;
+    clearError: () => void;
+}
+
+export const useAuthStore = create<AuthStore>()(
+    persist(
+        (set, get) => ({
+            user: null,
+            isAuthenticated: false,
+            loading: false,
+            error: null,
+            login: async (email: string, password: string) => {
+                if (!email || !password) {
+                    set({ error: "Please fill all fields" });
+                    return false;
+                }
+                set({ loading: true, error: null })
+                try {
+                    const response = await axios.post(`${backend}/login`, {
+                        email,
+                        password,
+                    }, {
+                        withCredentials: true
+                    });
+                    if (response.data.user) {
+                        set({
+                            user: response.data.user,
+                            isAuthenticated: true,
+                            loading: false
+                        })
+                        return true;
+                    }
+                    return false;
+                } catch (err) {
+                    let errorMessage = "Login failed";
+                    if (err.response?.data?.error) {
+                        errorMessage = err.response.data.error;
+                    } else if (err.message) {
+                        errorMessage = err.message;
+                    }
+                    set({ error: errorMessage, isAuthenticated: false, loading: false });
+                    return false;
+                }
+            },
+            signup: async (name: string, email: string, password: string) => {
+                if (!name || !email || !password) {
+                    set({error: "Please fill all fields"});
+                    return false;
+                }
+                set({loading: true, error: null});
+                try {
+                    const response = await axios.post(`${backend}/signup`, {
+                        name,
+                        email,
+                        password,
+                    }, {
+                        withCredentials: true
+                    });
+                    if (response.data.user) {
+                        set({
+                            user: response.data.user,
+                            isAuthenticated: true,
+                            loading: false
+                        })
+                        return true;
+                    }
+                    return false;
+                } catch (err) {
+                    let errorMessage = "Signup failed";
+                    if (err.response?.data?.error) {
+                        errorMessage = err.response.data.error;
+                    } else if (err.message) {
+                        errorMessage = err.message;
+                    }
+                    set({error: errorMessage, loading: false, isAuthenticated: false})
+                    return false;
+                }
+            },
+            logout: async () => {
+                try {
+                    await axios.post(`${backend}/logout`, {}, {withCredentials: true});
+                } catch {
+                    //console.error('Logout error', error);
+                }
+                set({user: null, error: null, isAuthenticated: false});
+            },
+            initializeAuth: () => {
+                const storedUser = localStorage.getItem('user');
+                if(storedUser) {
+                    try {
+                        const user = JSON.parse(storedUser);
+                        set({user: user, isAuthenticated: true});
+                    } catch(error) {
+                        localStorage.removeItem('user');
+                    }
+                }
+            },
+            clearError: () => {
+                set({error: null});
+            }
+        }),
+        {
+            name: 'auth-storage',
+            partialize: (state) => ({
+                user: state.user,
+                isAuthenticated: state.isAuthenticated
+            }),
+        }
+    )
+)

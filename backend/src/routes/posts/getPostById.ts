@@ -5,6 +5,13 @@ export const getPostById = Router();
 
 getPostById.get('/:id', async (req: Request, res: Response) => {
     try {
+        const userId = (req as any).user?.userId;
+        if (!userId) {
+            res.status(401).json({
+                error: "User not authenticated"
+            });
+            return;
+        }
         const { id } = req.params;
         let idNum = parseInt(id);
         if (isNaN(idNum)) {
@@ -14,13 +21,14 @@ getPostById.get('/:id', async (req: Request, res: Response) => {
 
         const post = await prisma.post.findFirst({
             where: {
-                id: idNum
+                id: idNum,
+                userId: userId
             }
         })
-        res.status(200).json({ 
+        res.status(200).json({
             message: `Get post ${idNum}`,
             post
-         });
+        });
     } catch (error) {
         console.error('Error getting post:', error);
         res.status(500).json({ error: 'Failed to retrieve post' });

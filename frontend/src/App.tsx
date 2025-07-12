@@ -7,6 +7,7 @@ import { UploadForm } from "./components/UploadForm";
 import { LoadingAnimation } from "./components/LoadingAnimation";
 import { Textpost } from "./pages/Textpost";
 import { Homepage } from "./pages/Homepage";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import { useScreenStore } from "./store";
 
 const Room = lazy(() => import("./pages/Room"));
@@ -16,10 +17,8 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
   const [isUploadFormVisible, setIsUploadFormVisible] = useState(false);
-  const {screen, setScreen} = useScreenStore();
-  
+  const { screen, setScreen } = useScreenStore();
   const location = useLocation();
-
   const routesWithNavbar = ["/room"];
   const shouldShowNavbar = routesWithNavbar.includes(location.pathname);
 
@@ -44,7 +43,7 @@ function App() {
     window.addEventListener("resize", updateScreen);
 
     return () => window.removeEventListener("resize", updateScreen);
-  }, []);
+  }, [setScreen]);
 
   return (
     <div id="App" className="bg-background min-h-screen max-w-screen">
@@ -60,12 +59,23 @@ function App() {
             <Route index element={<Homepage />} />
             <Route
               path="/room"
-              element={<Room  />}
+              element={
+                <ProtectedRoute>
+                  <Room />
+                </ProtectedRoute>
+              }
             />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
-            <Route path="/posts/:id" element={<Textpost />} />
+            <Route
+              path="/posts/:id"
+              element={
+                <ProtectedRoute>
+                  <Textpost />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

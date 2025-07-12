@@ -15,7 +15,7 @@ export default function Room() {
 
   const getPostsToDisplay = () => {
     if(searchQuery.trim()) {
-      if(filteredPosts.length > 0) {
+      if(filters.length > 0) {
         searchResults.filter(post => filters.includes(post.type));
       }
       return searchResults;

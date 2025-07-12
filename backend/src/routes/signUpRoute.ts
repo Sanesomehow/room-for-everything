@@ -2,6 +2,7 @@ import { Router } from 'express';
 import prisma from '../prismaConfig';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 
 
@@ -19,13 +20,24 @@ router.post('/', async (req: Request, res: Response) => {
                 password: hash
             }, select: {
                 id: true,
-                email: true
+                email: true,
+                name: true
             }
         });
         
-        res.status(200).json({
+        const secret: string = process.env.JWT_SECRET || 'secret';
+        const token = jwt.sign({
+            userId: newUser.id
+        }, secret, { expiresIn: '168h' });
+        
+        res.cookie('auth_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        }).status(200).json({
             message: "User signed Up",
-            newUser
+            user: newUser  
         });
 
     } catch (error) {

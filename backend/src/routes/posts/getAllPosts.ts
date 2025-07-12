@@ -7,7 +7,17 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   try {
+    const userId = (req as any).user?.userId;
+    if(!userId) {
+      res.status(401).json({
+        error: "User not authenticated"
+      });
+      return;
+    }
     const posts = await prisma.post.findMany({
+      where: {
+        userId: userId
+      },
       include: {
         user: {
           select: {
@@ -23,7 +33,6 @@ router.get('/', async (req, res) => {
       }
     });
 
-    // Transform the posts to match the frontend expectations
     const formattedPosts = posts.map(post => {
       return {
         id: post.id,
@@ -34,10 +43,9 @@ router.get('/', async (req, res) => {
         type: post.type,
         previewData: post.previewData,
         userId: post.userId,
-        createdAt: post.createdAt.toISOString(),
-        updatedAt: post.updatedAt.toISOString(),
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
         // If you want to include tags, make sure your Prisma query includes them and the type allows it
-        tags: (post as any).tags ?? []
       };
     });
 

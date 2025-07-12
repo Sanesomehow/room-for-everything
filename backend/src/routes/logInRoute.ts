@@ -7,12 +7,17 @@ export const router = Router();
 
 router.post('/', async (req: Request, res: Response) => {
     try {
-        const email = req.body.email;
-        const password = req.body.password;
+        const { email, password } = req.body;
+        
+        if(!email || !password) {
+            res.status(400).json({
+                error: "Email and password are required."
+            })
+        }
         const secret: string = process.env.JWT_SECRET || 'secret';
         const user = await prisma.user.findUnique({
             where: {
-                email: email,
+                email
             }
         })
         if (!user) {
@@ -56,5 +61,8 @@ router.post('/', async (req: Request, res: Response) => {
 
     } catch (err) {
         console.log(err + "password hash did not match")
+        res.status(500).json({
+            error: "Login Failed"
+        });
     }
 })

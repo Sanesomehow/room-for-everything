@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo/image-removebg-preview.png";
 import React from "react";
 import { Searchbar } from "./Searchbar";
+import { useAuthStore } from "@/store";
 
 export function Navbar({
   onCreatePostClick,
@@ -10,6 +11,8 @@ export function Navbar({
   onCreatePostClick: () => void;
   screen: string;
 }) {
+  const { isAuthenticated, logout } = useAuthStore();
+
   return (
     <div className="max-w-screen">
       <nav className="flex flex-col lg:flex-row items-center pb-10 px-2 md:px-10 relative">
@@ -41,6 +44,31 @@ export function Navbar({
           >
             <span className="flex items-center gap-2">Create</span>
           </button>
+
+          {isAuthenticated && (
+            <button
+              onClick={logout}
+              className="ml-4 flex items-center gap-2 px-5 py-3 text-gray-700 hover:text-red-600 font-medium rounded-full border border-gray-300 hover:border-red-300 transition-all duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="transition-all duration-200"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              Logout
+            </button>
+          )}
         </div>
       </nav>
     </div>

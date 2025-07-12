@@ -5,6 +5,13 @@ export const addTagsToPost = Router();
 
 addTagsToPost.post('/:id/tags', async (req: Request, res: Response) => {
   try {
+    const userId = (req as any).user?.userId;
+    if(!userId) {
+      res.status(401).json({
+        error: "User not authenticated"
+      });
+      return;
+    }
     const { id } = req.params;
     let idNum = parseInt(id);
     const { tags } = req.body;

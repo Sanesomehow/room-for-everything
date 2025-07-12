@@ -2,42 +2,36 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import googleLogo from "../assets/icons8-google.svg";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/store";
 
 export default function Signup() {
   const backend = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
+  const { signup, loading, error, clearError, isAuthenticated} = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if(isAuthenticated) {
+      navigate('/room');
+    }
+  }, [isAuthenticated, navigate])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !password) {
-      setError("Please fill all fields");
-      return;
-    }
-    
-    try {
-      setIsLoading(true);
-      setError("");
-      const response = await axios.post(`${backend}/signup`, {
-        name,
-        email,
-        password,
-      });
-      console.log(response);
-    } catch (err) {
-      //setError(err?.response?.data?.message || "Registration failed. Please try again.");
-      console.error(err);
-    } finally {
-      setIsLoading(false);
+    const success = await signup(name, email, password);
+    if(success) {
+      navigate('/room')
     }
   };
+
+  useEffect(() => {
+    return () => clearError();
+  }, [clearError])
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row items-stretch bg-background">
@@ -129,9 +123,9 @@ export default function Signup() {
               <Button 
                 className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white/80 font-medium rounded-lg transition-colors focus:ring-4 focus:ring-blue-300"
                 type="submit"
-                disabled={isLoading}
+                disabled={loading}
               >
-                {isLoading ? (
+                {loading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
                 ) : "Create Account"}
               </Button>

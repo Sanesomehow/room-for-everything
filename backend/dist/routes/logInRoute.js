@@ -20,17 +20,21 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.router = (0, express_1.Router)();
 exports.router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const email = req.body.email;
-        const password = req.body.password;
+        const { email, password } = req.body;
+        if (!email || !password) {
+            res.status(400).json({
+                error: "Email and password are required."
+            });
+        }
         const secret = process.env.JWT_SECRET || 'secret';
         const user = yield prismaConfig_1.default.user.findUnique({
             where: {
-                email: email,
+                email
             }
         });
         if (!user) {
             res.status(401).json({
-                error: "Invalid Username or Passsword"
+                error: "Invalid email or Passsword"
             });
             return;
         }
@@ -48,7 +52,7 @@ exports.router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, functio
             res.cookie('auth_token', token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                sameSite: 'lax',
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
             }).json({
                 message: "User Login successful",
@@ -59,8 +63,16 @@ exports.router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, functio
                 }
             });
         }
+        else {
+            res.status(401).json({
+                error: "Invalid email or password"
+            });
+        }
     }
     catch (err) {
         console.log(err + "password hash did not match");
+        res.status(500).json({
+            error: "Login Failed"
+        });
     }
 }));

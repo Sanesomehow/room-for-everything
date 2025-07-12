@@ -19,6 +19,14 @@ interface CreatePostBody {
 
 router.post('/', async (req: Request<{}, {}, CreatePostBody>, res: Response) => {
   try {
+    const userId = (req as any).user?.userId;
+    if(!userId) {
+      res.status(401).json({
+        error: "User not authenticated"
+      });
+      return;
+    }
+    
     const { title, text, url, tags } = req.body;
     let previewData = {};
     let type: ItemType = ItemType.TEXT;
@@ -37,8 +45,6 @@ router.post('/', async (req: Request<{}, {}, CreatePostBody>, res: Response) => 
     }
 
 
-
-    const userId = (req as any).user?.userId || 1;
 
 
 

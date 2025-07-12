@@ -26,7 +26,7 @@ const authMiddleware : RequestHandler = (req, res, next) => {
   const token = headerToken || cookieToken;
   const secret = process.env.JWT_SECRET || 'secret';
 
-  if (token == null) {
+  if (!token) {
     res.status(401).json({
       error: "Auth token is required"
     });
@@ -34,14 +34,22 @@ const authMiddleware : RequestHandler = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, secret);
-    console.log(decoded)
     req.user = decoded;
     next();
   } catch (err) {
-    console.log(err)
-    res.status(403).json({
-      error: "Invalid or expired token"
-    })
+    if (err instanceof jwt.TokenExpiredError) {
+      res.status(401).json({
+        error: "Token has expired"
+      });
+    } else if (err instanceof jwt.JsonWebTokenError) {
+      res.status(403).json({
+        error: "Invalid token"
+      });
+    } else {
+      res.status(500).json({
+        error: "Token verification failed"
+      });
+    }
     return;
   }
 };
@@ -56,6 +64,8 @@ const authMiddleware : RequestHandler = (req, res, next) => {
 
 // Use the dev middleware instead of the real auth middleware
 // router.use(devAuthMiddleware);
+
+router.use(authMiddleware);
 
 // GET /api/posts
 router.use('/', getAllPosts);
