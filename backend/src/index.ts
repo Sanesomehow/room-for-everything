@@ -29,6 +29,6 @@ app.use('/api/posts', postsRouter);
 
 //TODO: add a route for sharing
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log('Listening on port ' + port);
 })
