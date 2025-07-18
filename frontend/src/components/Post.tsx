@@ -16,18 +16,18 @@ export function Post({ post, screen }: { post: any; screen: string }) {
   const previewData = post.previewData;
   //const dispatch: AppDispatch = useDispatch();
   const { fetchPosts } = usePostStore();
-  let width;
-  let height;
-  if (screen == "mobile") {
-    width = 175;
-    height = 100;
-  } else if (screen == "tablet") {
-    width = 300;
-    height = 170;
-  } else {
-    width = 300;
-    height = 170;
-  }
+  // let width;
+  // let height;
+  // if (screen == "mobile") {
+  //   width = 175;
+  //   height = 100;
+  // } else if (screen == "tablet") {
+  //   width = 300;
+  //   height = 170;
+  // } else {
+  //   width = 300;
+  //   height = 170;
+  // }
 
   const handleClick = (url: string) => {
     window.open(url, "_blank")?.focus();
