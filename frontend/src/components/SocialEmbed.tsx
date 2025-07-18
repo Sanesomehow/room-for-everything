@@ -119,7 +119,7 @@ export function LinkedinEmbed({ data }: { data: any }) {
 export function PinterestEmbed({ data }: { data: any }) {
     let image = data.image;
     let title = data.title;
-    let description = data.description;
+    //let description = data.description;
 
     return (
         <div className="w-full max-w-full relative px-4 md:px-4 lg:px-5 pt-4 md:pt-4 lg:pt-4 pb-2">

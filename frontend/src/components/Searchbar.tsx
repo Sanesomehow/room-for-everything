@@ -7,7 +7,7 @@ import YoutubeIcon from "../assets/icons8-youtube-50.png";
 import LinkIcon from "../assets/icons8-link-48.png";
 import TextIcon from "../assets/icons8-text-50.png";
 import usePostStore from "@/store";
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 export function Searchbar() {
   const filterOptions = [
@@ -205,7 +205,7 @@ export function Searchbar() {
 
           <div className="p-3 max-h-72 overflow-y-auto">
             <div className="grid grid-cols-2 gap-2">
-              {filterOptions.map((option, index) => (
+              {filterOptions.map((option) => (
                 <label
                   key={option.value}
                   htmlFor={`filter-${option.value}`}

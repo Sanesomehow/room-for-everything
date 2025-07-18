@@ -178,7 +178,7 @@ interface ScreenStore {
     setScreen: (screen: "mobile" | "tablet" | "desktop") => void;
 }
 
-export const useScreenStore = create<ScreenStore>((set, get) => ({
+export const useScreenStore = create<ScreenStore>((set) => ({
     screen: 'desktop',
     setScreen: (screen: "mobile" | "tablet" | "desktop") => set({ screen })
 }))
@@ -200,7 +200,7 @@ interface AuthStore {
 
 export const useAuthStore = create<AuthStore>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             user: null,
             isAuthenticated: false,
             loading: false,

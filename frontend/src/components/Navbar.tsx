@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/logo/image-removebg-preview.png";
-import React from "react";
 import { Searchbar } from "./Searchbar";
 import { useAuthStore } from "@/store";
 
 export function Navbar({
   onCreatePostClick,
-  screen,
 }: {
   onCreatePostClick: () => void;
   screen: string;

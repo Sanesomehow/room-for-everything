@@ -2,13 +2,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Clipboard } from "flowbite-react";
 import { useAuthStore } from "@/store";
 
 export default function Login() {
-  const backend = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+  //const backend = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
   const { login, isAuthenticated, loading, error, clearError} = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

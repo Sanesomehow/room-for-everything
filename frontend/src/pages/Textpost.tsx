@@ -13,7 +13,7 @@ export function Textpost() {
   }
   const [post, setPost] = useState<Post>({ id: NaN, title: "", text: "" });
   const [isLoading, setIsLoading] = useState(true);
-  const { getPostsById, posts } = usePostStore();
+  const { getPostsById } = usePostStore();
   const backend = import.meta.env.VITE_BACKEND_URL;
 
   const handleDelete = async () => {

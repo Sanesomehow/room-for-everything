@@ -1,14 +1,12 @@
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import googleLogo from "../assets/icons8-google.svg";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store";
 
 export default function Signup() {
-  const backend = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
+  //const backend = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
   const { signup, loading, error, clearError, isAuthenticated} = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

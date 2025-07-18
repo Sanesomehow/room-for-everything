@@ -4,8 +4,8 @@ import { Post } from "@/components/Post";
 import usePostStore, { useScreenStore } from "@/store";
 
 export default function Room() {
-  const { posts, loading, error, fetchPosts, filters, setFilters, getFilteredPosts, searchQuery, getSearchResults } = usePostStore();
-  const { screen, setScreen } = useScreenStore();
+  const {  loading, fetchPosts, filters, getFilteredPosts, searchQuery, getSearchResults } = usePostStore();
+  const { screen } = useScreenStore();
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]); 
