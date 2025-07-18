@@ -229,10 +229,10 @@ export const useAuthStore = create<AuthStore>()(
                     return false;
                 } catch (err) {
                     let errorMessage = "Login failed";
-                    if (err.response?.data?.error) {
-                        errorMessage = err.response.data.error;
-                    } else if (err.message) {
-                        errorMessage = err.message;
+                    if (typeof err === "object" && err !== null && "response" in err && typeof (err as any).response === "object" && (err as any).response !== null && "data" in (err as any).response && typeof (err as any).response.data === "object" && (err as any).response.data !== null && "error" in (err as any).response.data) {
+                        errorMessage = (err as any).response.data.error;
+                    } else if (typeof err === "object" && err !== null && "message" in err) {
+                        errorMessage = (err as any).message;
                     }
                     set({ error: errorMessage, isAuthenticated: false, loading: false });
                     return false;
@@ -263,10 +263,10 @@ export const useAuthStore = create<AuthStore>()(
                     return false;
                 } catch (err) {
                     let errorMessage = "Signup failed";
-                    if (err.response?.data?.error) {
-                        errorMessage = err.response.data.error;
-                    } else if (err.message) {
-                        errorMessage = err.message;
+                    if (typeof err === "object" && err !== null && "response" in err && typeof (err as any).response === "object" && (err as any).response !== null && "data" in (err as any).response && typeof (err as any).response.data === "object" && (err as any).response.data !== null && "error" in (err as any).response.data) {
+                        errorMessage = (err as any).response.data.error;
+                    } else if (typeof err === "object" && err !== null && "message" in err) {
+                        errorMessage = (err as any).message;
                     }
                     set({error: errorMessage, loading: false, isAuthenticated: false})
                     return false;
