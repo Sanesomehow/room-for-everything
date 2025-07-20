@@ -188,6 +188,7 @@ export const useScreenStore = create<ScreenStore>((set) => ({
 
 interface AuthStore {
     user: any;
+    token: string | null;
     isAuthenticated: boolean;
     loading: boolean;
     error: string | null;
@@ -198,10 +199,20 @@ interface AuthStore {
     clearError: () => void;
 }
 
+// Set up axios interceptor to include token in all requests
+const setupAxiosInterceptor = (token: string | null) => {
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+        delete axios.defaults.headers.common['Authorization'];
+    }
+};
+
 export const useAuthStore = create<AuthStore>()(
     persist(
-        (set) => ({
+        (set, get) => ({
             user: null,
+            token: null,
             isAuthenticated: false,
             loading: false,
             error: null,
@@ -218,9 +229,11 @@ export const useAuthStore = create<AuthStore>()(
                     }, {
                         withCredentials: true
                     });
-                    if (response.data.user) {
+                    if (response.data.user && response.data.token) {
+                        setupAxiosInterceptor(response.data.token);
                         set({
                             user: response.data.user,
+                            token: response.data.token,
                             isAuthenticated: true,
                             loading: false
                         })
@@ -252,9 +265,11 @@ export const useAuthStore = create<AuthStore>()(
                     }, {
                         withCredentials: true
                     });
-                    if (response.data.user) {
+                    if (response.data.user && response.data.token) {
+                        setupAxiosInterceptor(response.data.token);
                         set({
                             user: response.data.user,
+                            token: response.data.token,
                             isAuthenticated: true,
                             loading: false
                         })
@@ -278,17 +293,13 @@ export const useAuthStore = create<AuthStore>()(
                 } catch {
                     //console.error('Logout error', error);
                 }
-                set({user: null, error: null, isAuthenticated: false});
+                setupAxiosInterceptor(null);
+                set({user: null, token: null, error: null, isAuthenticated: false});
             },
             initializeAuth: () => {
-                const storedUser = localStorage.getItem('user');
-                if(storedUser) {
-                    try {
-                        const user = JSON.parse(storedUser);
-                        set({user: user, isAuthenticated: true});
-                    } catch(error) {
-                        localStorage.removeItem('user');
-                    }
+                const { token } = get();
+                if (token) {
+                    setupAxiosInterceptor(token);
                 }
             },
             clearError: () => {
@@ -299,6 +310,7 @@ export const useAuthStore = create<AuthStore>()(
             name: 'auth-storage',
             partialize: (state) => ({
                 user: state.user,
+                token: state.token,
                 isAuthenticated: state.isAuthenticated
             }),
         }
