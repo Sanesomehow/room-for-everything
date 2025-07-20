@@ -44,9 +44,7 @@ export async function fetchMetadata({ url, type }: {
             console.error("failed to fetch tweet: ", error);
         }
 
-    }else if(type == ItemType.INSTAGRAM){
-        
-    } else {
+    }else {
         const { body: html } = await got(url, {
             timeout: {
                 request: 10000 // 10 sec

@@ -60,6 +60,7 @@ router.post('/', async (req: Request<{}, {}, CreatePostBody>, res: Response) => 
         updatedAt: new Date(),
       },
     });
+    console.log("Post created");
 
     res.status(201).json({
       message: 'Post created successfully',

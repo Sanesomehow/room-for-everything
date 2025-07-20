@@ -2,11 +2,24 @@ import pinterestLogo from '../assets/icons8-pinterest-logo.svg';
 import youtubeIcon from "../assets/icons8-youtube.svg"
 
 export function InstagramEmbed({ data }: { data: any }) {
-
     let image = data.image;
-    let name = (data.title).split(' on')[0];
-    let username = (data.description).split(' on')[0];
-    username = username.split(" - ")[1];
+    let name = '';
+    let username = '';
+
+    try {
+        if (data.title) {
+            name = data.title.split(' on')[0] || '';
+        }
+        if (data.description) {
+            const descParts = data.description.split(' on')[0] || '';
+            if (descParts && typeof descParts === 'string') {
+                const usernameParts = descParts.split(' - ');
+                username = usernameParts.length > 1 ? usernameParts[1] : '';
+            }
+        }
+    } catch (error) {
+        console.warn('Error parsing Instagram embed data:', error);
+    }
 
   return (
     <div className="bg-[#15202B] border border-border/60 hover:border-primary/30 rounded-xl px-3 sm:px-4 md:px-5 pt-3 sm:pt-4 pb-4 sm:pb-8 md:pb-10 flex flex-col justify-between">
@@ -71,13 +84,32 @@ export function LinkedinEmbed({ data }: { data: any }) {
   let image = data.image;
   let title = data.title;
   let description = data.description;
-  let name = data.url.split("_")[0];
+  let firstname = '';
+  let lastname = '';
 
-  let firstname = name.split("-")[0];
-  firstname = firstname.split("posts/")[1]
-  firstname = firstname.charAt(0).toUpperCase() + firstname.slice(1);
-  let lastname = name.split("-")[1];
-  lastname = lastname.charAt(0).toUpperCase() + lastname.slice(1);
+  try {
+        if (data.url && typeof data.url === 'string') {
+            const urlParts = data.url.split("_");
+            if (urlParts.length > 0) {
+                const name = urlParts[0];
+                const nameParts = name.split("-");
+                
+                if (nameParts.length > 0) {
+                    let firstPart = nameParts[0];
+                    if (firstPart.includes("posts/")) {
+                        firstPart = firstPart.split("posts/")[1] || '';
+                    }
+                    firstname = firstPart ? firstPart.charAt(0).toUpperCase() + firstPart.slice(1) : '';
+                }
+                
+                if (nameParts.length > 1) {
+                    lastname = nameParts[1] ? nameParts[1].charAt(0).toUpperCase() + nameParts[1].slice(1) : '';
+                }
+            }
+        }
+    } catch (error) {
+        console.warn('Error parsing LinkedIn embed data:', error);
+    }
 
   return (
     <div className="w-full max-w-full relative md:pt-2 lg:pt-2 ">
@@ -173,8 +205,17 @@ export const TwitterEmbed = ({ data }: { data: any }) => {
   const doc = parser.parseFromString(previewData.html, "text/html");
   const quoteParagraph = doc.querySelector("blockquote p");
   const quoteText = quoteParagraph?.childNodes[0].nodeValue?.trim();
-  let username = new URL(previewData.url).pathname.split('/')[1];
+  let username = '';
 
+  try {
+        if (previewData.url && typeof previewData.url === 'string') {
+            const url = new URL(previewData.url);
+            const pathParts = url.pathname.split('/');
+            username = pathParts.length > 1 ? pathParts[1] : '';
+        }
+    } catch (error) {
+        console.warn('Error parsing Twitter embed URL:', error);
+    }
 
   return (
     <div className="bg-[#15202B] border border-border/60 hover:border-primary/30 rounded-xl px-3 sm:px-4 md:px-4 pt-3 sm:pt-4 pb-6 sm:pb-8 md:pb-10 flex flex-col justify-between"

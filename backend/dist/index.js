@@ -17,7 +17,7 @@ const port = parseInt(process.env.PORT || '3000');
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:5173',
+    origin: process.env.VITE_FRONTEND_URL || 'http://localhost:5173',
     credentials: true
 }));
 app.use((0, cookie_parser_1.default)());
@@ -28,6 +28,6 @@ app.use('/logout', logoutRoute_1.router);
 //app.use('/auth', googleAuthRouter);
 app.use('/api/posts', postsRoute_1.router);
 //TODO: add a route for sharing
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log('Listening on port ' + port);
 });

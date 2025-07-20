@@ -46,7 +46,7 @@ export function Navbar({
           {isAuthenticated && (
             <button
               onClick={logout}
-              className="ml-4 flex items-center gap-2 px-5 py-3 text-gray-700 hover:text-red-600 font-medium rounded-full border border-gray-300 hover:border-red-300 transition-all duration-200"
+              className="bg-[#15202B] ml-4 flex items-center gap-2 px-5 py-3 text-red-300 hover:text-red-600 font-medium rounded-full hover:scale-110 hover:border-red-600 transition-all duration-450"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

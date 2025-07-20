@@ -5,4 +5,5 @@ const express_1 = require("express");
 exports.router = (0, express_1.Router)();
 exports.router.get('/', (req, res) => {
     console.log('Health Check');
+    res.json({ status: "Backend is running" });
 });
