@@ -32,12 +32,13 @@ router.post('/', async (req: Request<{}, {}, CreatePostBody>, res: Response) => 
       try {
         type = findType(url);
         // Set a timeout for metadata fetching to prevent delays
-        const metadataPromise = fetchMetadata({ url, type });
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Metadata timeout')), 5000)
-        );
+        // const metadataPromise = fetchMetadata({ url, type });
+        // const timeoutPromise = new Promise((_, reject) => 
+        //   setTimeout(() => reject(new Error('Metadata timeout')), 5000)
+        // );
         
-        previewData = await Promise.race([metadataPromise, timeoutPromise]) ?? {};
+        // previewData = await Promise.race([metadataPromise, timeoutPromise]) ?? {};
+        previewData = fetchMetadata({ url, type });
       } catch (error) {
         console.log('Metadata fetch failed or timed out, continuing without metadata:', error);
         previewData = {};
