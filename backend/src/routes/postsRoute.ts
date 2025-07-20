@@ -11,14 +11,6 @@ import { removeTagFromPost } from './posts/removeTagFromPost';
 
 export const router = Router();
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: User | undefined;
-    }
-  }
-}
-
 const authMiddleware : RequestHandler = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const headerToken = authHeader && authHeader.split(' ')[1];
@@ -26,17 +18,31 @@ const authMiddleware : RequestHandler = (req, res, next) => {
   const token = headerToken || cookieToken;
   const secret = process.env.JWT_SECRET || 'secret';
 
+  console.log('Auth header:', authHeader);
+  console.log('Token found:', !!token);
+
   if (!token) {
+    console.log('No token provided');
     res.status(401).json({
       error: "Auth token is required"
     });
     return;
   }
   try {
-    const decoded = jwt.verify(token, secret);
-    req.user = decoded;
+    const decoded = jwt.verify(token, secret) as any;
+    console.log('Decoded token:', decoded);
+    
+    // Cast to the existing User type structure
+    req.user = {
+      userId: decoded.userId || decoded.id || decoded.user_id,
+      email: decoded.email,
+      ...decoded
+    } as any; // Temporary cast to avoid type conflicts
+    
+    console.log('User set on request:', req.user);
     next();
   } catch (err) {
+    console.log('Token verification error:', err);
     if (err instanceof jwt.TokenExpiredError) {
       res.status(401).json({
         error: "Token has expired"
@@ -53,7 +59,6 @@ const authMiddleware : RequestHandler = (req, res, next) => {
     return;
   }
 };
-
 
 // Temporary development middleware that bypasses authentication
 // const devAuthMiddleware: RequestHandler = (req, res, next) => {
