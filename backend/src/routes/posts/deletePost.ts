@@ -15,25 +15,25 @@ deletePost.delete('/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     let idNum = parseInt(id);
 
-    const existingPost = await prisma.post.findUnique({
+    // Check if post exists AND belongs to user, then delete in one operation
+    const deletedPost = await prisma.post.deleteMany({
       where: {
         id: idNum,
         userId: userId
       }
     });
 
-    if(!existingPost) {
+    if(deletedPost.count === 0) {
       res.status(404).json({
-        message: "Post not found"
+        message: "Post not found or unauthorized"
       });
+      return;
     }
     
-    await prisma.post.delete({
-      where: {
-        id: idNum
-      }
-    })
-    res.status(200).json({ message: `Deleted post ${id}` });
+    res.status(200).json({ 
+      message: `Deleted post ${id}`,
+      deleted: deletedPost.count 
+    });
   } catch (error) {
     console.error('Error deleting post:', error);
     res.status(500).json({ error: 'Failed to delete post' });

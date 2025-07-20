@@ -16,15 +16,17 @@ updatePost.put('/:id', async (req: Request, res: Response) => {
     let idNum = parseInt(id);
     const { title, text } = req.body;
 
-    const foundPost = await prisma.post.findUnique({
+    // Check if post exists AND belongs to user in one query
+    const foundPost = await prisma.post.findFirst({
       where: {
-        id: idNum
+        id: idNum,
+        userId: userId
       }
-    })
+    });
 
     if(!foundPost) {
       res.status(404).json({
-        message: "Post not found"
+        message: "Post not found or unauthorized"
       });
       return;
     }

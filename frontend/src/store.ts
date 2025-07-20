@@ -229,9 +229,9 @@ export const useAuthStore = create<AuthStore>()(
                     }, {
                         withCredentials: true
                     });
-                    
-                    console.log('Login response:', response.data); // Debug log
-                    
+
+                    //console.log('Login response:', response.data); 
+
                     if (response.data.user) {
                         const token = response.data.token;
                         if (token) {
@@ -259,10 +259,10 @@ export const useAuthStore = create<AuthStore>()(
             },
             signup: async (name: string, email: string, password: string) => {
                 if (!name || !email || !password) {
-                    set({error: "Please fill all fields"});
+                    set({ error: "Please fill all fields" });
                     return false;
                 }
-                set({loading: true, error: null});
+                set({ loading: true, error: null });
                 try {
                     const response = await axios.post(`${backend}/signup`, {
                         name,
@@ -289,37 +289,32 @@ export const useAuthStore = create<AuthStore>()(
                     } else if (typeof err === "object" && err !== null && "message" in err) {
                         errorMessage = (err as any).message;
                     }
-                    set({error: errorMessage, loading: false, isAuthenticated: false})
+                    set({ error: errorMessage, loading: false, isAuthenticated: false })
                     return false;
                 }
             },
             logout: async () => {
                 try {
-                    await axios.post(`${backend}/logout`, {}, {withCredentials: true});
+                    await axios.post(`${backend}/logout`, {}, { withCredentials: true });
                 } catch {
                     //console.error('Logout error', error);
                 }
                 setupAxiosInterceptor(null);
-                set({user: null, token: null, error: null, isAuthenticated: false});
+                set({ user: null, token: null, error: null, isAuthenticated: false });
             },
             initializeAuth: () => {
-                const { token } = get();
-                if (token) {
-                    setupAxiosInterceptor(token);
-                    const storedUser = localStorage.getItem('user');
-                if(storedUser) {
-                    try {
-                        const user = JSON.parse(storedUser);
-                        set({user: user, isAuthenticated: true});
-                    } catch(error) {
-                        localStorage.removeItem('user');
-                    }
-                }
-                }
+                const state = get();
+                console.log('Initializing auth, stored token:', state.token); // Debug log
                 
+                if (state.token) {
+                    setupAxiosInterceptor(state.token);
+                    console.log('Token set in axios headers'); // Debug log
+                } else {
+                    console.log('No token found in storage'); // Debug log
+                }
             },
             clearError: () => {
-                set({error: null});
+                set({ error: null });
             }
         }),
         {

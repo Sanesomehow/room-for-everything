@@ -8,7 +8,7 @@ import { LoadingAnimation } from "./components/LoadingAnimation";
 import { Textpost } from "./pages/Textpost";
 import { Homepage } from "./pages/Homepage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { useScreenStore } from "./store";
+import { useAuthStore, useScreenStore } from "./store";
 
 const Room = lazy(() => import("./pages/Room"));
 const Login = lazy(() => import("./pages/Login"));
@@ -18,9 +18,14 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 function App() {
   const [isUploadFormVisible, setIsUploadFormVisible] = useState(false);
   const { screen, setScreen } = useScreenStore();
+  const { initializeAuth } = useAuthStore(); 
   const location = useLocation();
   const routesWithNavbar = ["/room"];
   const shouldShowNavbar = routesWithNavbar.includes(location.pathname);
+
+  useEffect(() => {
+  initializeAuth();
+}, []);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
