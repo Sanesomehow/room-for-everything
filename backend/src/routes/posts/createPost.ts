@@ -27,7 +27,6 @@ router.post('/', async (req: Request<{}, {}, CreatePostBody>, res: Response) => 
     let previewData = {};
     let type: ItemType = ItemType.TEXT;
 
-    // Fetch metadata asynchronously but don't wait for it if it's slow
     if (url) {
       try {
         type = findType(url);
@@ -38,7 +37,7 @@ router.post('/', async (req: Request<{}, {}, CreatePostBody>, res: Response) => 
         // );
         
         // previewData = await Promise.race([metadataPromise, timeoutPromise]) ?? {};
-        previewData = fetchMetadata({ url, type });
+        previewData = await fetchMetadata({ url, type }) ?? {};
       } catch (error) {
         console.log('Metadata fetch failed or timed out, continuing without metadata:', error);
         previewData = {};

@@ -42,6 +42,7 @@ export async function fetchMetadata({ url, type }: {
             return data
         } catch(error) {
             console.error("failed to fetch tweet: ", error);
+            return { url };
         }
 
     }else {
