@@ -60,7 +60,8 @@ exports.router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, functio
                     id: user.id,
                     email: user.email,
                     name: user.name
-                }
+                },
+                token: token // Add token to response body
             });
         }
         else {

@@ -229,11 +229,17 @@ export const useAuthStore = create<AuthStore>()(
                     }, {
                         withCredentials: true
                     });
-                    if (response.data.user && response.data.token) {
-                        setupAxiosInterceptor(response.data.token);
+                    
+                    console.log('Login response:', response.data); // Debug log
+                    
+                    if (response.data.user) {
+                        const token = response.data.token;
+                        if (token) {
+                            setupAxiosInterceptor(token);
+                        }
                         set({
                             user: response.data.user,
-                            token: response.data.token,
+                            token: token || null,
                             isAuthenticated: true,
                             loading: false
                         })
@@ -300,7 +306,17 @@ export const useAuthStore = create<AuthStore>()(
                 const { token } = get();
                 if (token) {
                     setupAxiosInterceptor(token);
+                    const storedUser = localStorage.getItem('user');
+                if(storedUser) {
+                    try {
+                        const user = JSON.parse(storedUser);
+                        set({user: user, isAuthenticated: true});
+                    } catch(error) {
+                        localStorage.removeItem('user');
+                    }
                 }
+                }
+                
             },
             clearError: () => {
                 set({error: null});
