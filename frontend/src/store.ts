@@ -304,13 +304,13 @@ export const useAuthStore = create<AuthStore>()(
             },
             initializeAuth: () => {
                 const state = get();
-                console.log('Initializing auth, stored token:', state.token); // Debug log
+                //console.log('Initializing auth, stored token:', state.token); 
                 
                 if (state.token) {
                     setupAxiosInterceptor(state.token);
-                    console.log('Token set in axios headers'); // Debug log
+                    //console.log('Token set in axios headers'); 
                 } else {
-                    console.log('No token found in storage'); // Debug log
+                    //console.log('No token found in storage');
                 }
             },
             clearError: () => {

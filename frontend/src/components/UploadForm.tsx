@@ -62,8 +62,8 @@ export function UploadForm({
 
     try {
       const response = await axios.post(`${backend}/api/posts`, data);
-      console.log(response);
-      console.log("request sent");
+      //console.log(response);
+      //console.log("request sent");
       setIsVisible(false);
       fetchPosts();
     } catch (error) {

@@ -264,9 +264,11 @@ export const TwitterEmbed = ({ data }: { data: any }) => {
 
 
 export function YoutubeEmbed({ data }: { data: any }) {
-    let image = data.image;
+    let image = data.thumbnail_url;
     let title = data.title;
-    let description = data.description;
+    let description = data.author_name;
+    // console.log(description);
+    // console.log(image);
 
     return (
         <div className="w-full max-w-full relative px-2.5 pt-3 pb-4 sm:px-2.5 sm:pt-3 sm:pb-4 md:px-3 md:pt-4 md:pb-4 lg:px-4 lg:pt-4 lg:pb-6">

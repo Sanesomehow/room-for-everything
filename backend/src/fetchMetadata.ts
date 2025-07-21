@@ -45,7 +45,30 @@ export async function fetchMetadata({ url, type }: {
             return { url };
         }
 
-    }else {
+    } else if(type === ItemType.YOUTUBE) {
+        let processedUrl = url;
+        if (url.includes("youtu.be/")) {
+            const videoId = url.split("youtu.be/")[1].split("?")[0]; // Extract ID before any query params
+            processedUrl = `https://www.youtube.com/watch?v=${videoId}`;
+        }
+        
+        const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(processedUrl)}&format=json`;
+
+        try {
+            const fetchResponse = await fetch(oembedUrl);
+
+            if(!fetchResponse.ok) {
+                console.error(`YouTube oEmbed returned status: ${fetchResponse.status}`);
+                return { url };
+            }
+
+            const data = await fetchResponse.json();
+            return data;
+        } catch (error) {
+            console.error("Failed to fetch YouTube video metadata:", error);
+            return { url };
+        }
+    } else {
         const { body: html } = await got(url, {
             timeout: {
                 request: 10000 // 10 sec
