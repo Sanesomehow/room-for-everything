@@ -1,5 +1,5 @@
 import usePostStore from "@/store";
-import axios from "axios";
+//import axios from "axios";
 import { useEffect, useState } from "react";
 //import type { AppDispatch } from "@/store";
 //import { fetchPosts } from "@/slices/postsSlice";
@@ -13,7 +13,7 @@ export function UploadForm({
   setIsVisible: (isVisible: boolean) => void;
   //dispatch: AppDispatch;
 }) {
-  const backend = import.meta.env.VITE_BACKEND_URL;
+  //const backend = import.meta.env.VITE_BACKEND_URL;
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [url, setUrl] = useState("");
@@ -46,7 +46,7 @@ export function UploadForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let data;
+    let data = {};
     {
       link
         ? (data = {
@@ -61,7 +61,7 @@ export function UploadForm({
     }
 
     try {
-      const response = await axios.post(`${backend}/api/posts`, data);
+      //const response = await axios.post(`${backend}/api/posts`, data);
       //console.log(response);
       //console.log("request sent");
       setIsVisible(false);

@@ -18,7 +18,7 @@ export function Textpost() {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`${backend}/api/posts/${post.id}`);
+      //const response = await axios.delete(`${backend}/api/posts/${post.id}`);
       //console.log(response);
     } catch (error) {
       console.error("Failed to delete post: ", error);

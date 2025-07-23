@@ -1,5 +1,5 @@
 //import { fetchPosts } from "@/slices/postsSlice";
-import axios from "axios";
+//import axios from "axios";
 import { Link } from "react-router-dom";
 //import type { AppDispatch } from "@/store";
 //import { useDispatch } from "react-redux";
@@ -12,7 +12,7 @@ import { InstagramEmbed,
 import usePostStore from "@/store";
 
 export function Post({ post, screen }: { post: any; screen: string }) {
-  const backend = import.meta.env.VITE_BACKEND_URL;
+  //const backend = import.meta.env.VITE_BACKEND_URL;
   const previewData = post.previewData;
   //const dispatch: AppDispatch = useDispatch();
   const { fetchPosts } = usePostStore();
@@ -35,7 +35,7 @@ export function Post({ post, screen }: { post: any; screen: string }) {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`${backend}/api/posts/${post.id}`);
+      //const response = await axios.delete(`${backend}/api/posts/${post.id}`);
       //console.log(response);
     } catch (error) {
       console.error("Failed to delete post: ", error);
