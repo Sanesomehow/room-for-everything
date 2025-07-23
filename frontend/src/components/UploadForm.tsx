@@ -123,12 +123,12 @@ export function UploadForm({
         </div>
 
         {link ? (
-          <form className="max-w-sm" onSubmit={handleSubmit}>
-            <div className="mb-5 w-sm">
+          <form className="max-w-sm w-sm px-5" onSubmit={handleSubmit}>
+            <div className="mb-5">
               <input
                 type="url"
                 id="url"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="abc.com/pqr"
                 required
                 onChange={(e) => {
@@ -144,12 +144,12 @@ export function UploadForm({
             </button>
           </form>
         ) : (
-          <form className="max-w-sm" onSubmit={handleSubmit}>
-            <div className="mb-5 w-sm">
+          <form className="max-w-sm w-sm px-5" onSubmit={handleSubmit}>
+            <div className="mb-5">
               <input
                 type="text"
                 id="text"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Title"
                 onChange={(e) => setTitle(e.target.value)}
               />
