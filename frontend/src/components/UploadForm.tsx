@@ -46,19 +46,19 @@ export function UploadForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let data = {};
-    {
-      link
-        ? (data = {
-            url: url,
-            type: "LINK",
-          })
-        : (data = {
-            title: title,
-            text: content,
-            type: "TEXT",
-          });
-    }
+    // let data = {};
+    // {
+    //   link
+    //     ? (data = {
+    //         url: url,
+    //         type: "LINK",
+    //       })
+    //     : (data = {
+    //         title: title,
+    //         text: content,
+    //         type: "TEXT",
+    //       });
+    // }
 
     try {
       //const response = await axios.post(`${backend}/api/posts`, data);
